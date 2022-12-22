@@ -1,0 +1,125 @@
+name: GitHub Release
+
+on:
+  push:
+  # 対象ブランチ
+    branches:
+      - main
+
+jobs:
+  setup:
+    name: setup
+    runs-on: ubuntu-latest
+
+    # ジョブに依存しているすべての下流のジョブから利用する
+    outputs:
+      version: ${{ steps.package-version.outputs.version }}
+      tag-name: v${{ steps.package-version.outputs.version }}
+      is-pre-verion: ${{ steps.pre-version.outputs.pre-version }}
+      tag-exist: ${{ steps.tag-exist.outputs.exists }}
+
+    steps:
+        # すべてのタグとブランチのすべての履歴を取得
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: set package version
+        id: package-version
+        # node -p 結果を出力 -e 渡した文字列をスクリプトとして実行
+        # 出力パラメータの設定 '`::set-output name=version::${require("./package.json").version}`'
+        run: node -p -e '`::set-output name=version::${require("./package.json").version}`'
+
+      - name: check pre-release
+        # 範囲指定有無の判定
+        id: pre-version
+        run: node -p -e '`::set-output name=pre-version::${require("./package.json").version.includes("-")}`'
+
+        # タグが存在するかを判定
+      - name: check tag exists
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: check-tag
+        with:
+          tag: ${{ steps.package-version.outputs.version }}
+        # 全てのstepsから参照できる
+        env:
+          # 最低限の権限で実行する
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    name: release
+    # このジョブの実行前に正常に完了する必要があるジョブ
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          registry-url: "https://npm.pkg.github.com"
+
+      # タグを作成する
+      - name: package-version-to-git-tag
+        uses: pkgdeps/git-tag-action@v2
+        with:
+          # 以下は魔法の呪文的なお決まり
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_repo: ${{ github.repository }}
+          version: ${{ needs.setup.outputs.version }}
+          git_commit_sha: ${{ github.sha }}
+          # タグ名
+          git_tag_prefix: "v"
+
+  release-note:
+    name: release note
+    needs: [setup, release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: "https://npm.pkg.github.com"
+
+      # リリースノートを自動作成
+      - name: set change log
+        uses: scottbrenner/generate-changelog-action@master
+        id: change-log
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        if:  needs.setup.outputs.tag-exist != 'true' && needs.setup.outputs.is-pre-verion != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.setup.outputs.tag-name }}
+          release_name: Release ${{ needs.setup.outputs.tag-name }}
+          body: ${{ steps.change-log.outputs.changelog }}
+
+  publish-npm:
+    name: publish npm
+    needs: [setup, release, release-note]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npx tsc -d
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
