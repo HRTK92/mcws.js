@@ -1,10 +1,10 @@
 name: GitHub Release
 
 on:
-  push:
-  # 対象ブランチ
-    branches:
-      - main
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - main
 
 jobs:
   setup:
