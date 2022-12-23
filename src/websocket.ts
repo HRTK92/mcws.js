@@ -51,9 +51,9 @@ class mswc {
         if (this.debug) {
           console.log(data)
         }
-        if (data.body.eventName) {
-          if (this.eventCallbacks[data.body.eventName]) {
-            this.eventCallbacks[data.body.eventName].forEach((callback) => {
+        if (data.header.eventName) {
+          if (this.eventCallbacks[data.header.eventName]) {
+            this.eventCallbacks[data.header.eventName].forEach((callback) => {
               callback(data)
             })
           }
