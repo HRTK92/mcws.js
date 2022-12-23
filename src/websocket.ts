@@ -16,6 +16,11 @@ class mswc {
     this.readyCallback = callback
   }
 
+  private connectionCallback: (client: WebSocket) => void = () => { }
+  public onConnection(callback: (client: WebSocket) => void) {
+    this.connectionCallback = callback
+  }
+
   private eventCallbacks: { [eventName: string]: Array<(data: any) => void> } = {}
   public on(eventName: string, callback: (data: any) => void) {
     if (!this.eventCallbacks[eventName]) {
@@ -26,7 +31,8 @@ class mswc {
   public createServer() {
     const wss = new WebSocket.Server({ host: this.host, port: this.port })
     this.server = wss
-    wss.on('connection', (ws: any) => {
+    wss.on('connection', (ws: WebSocket) => {
+      this.connectionCallback(ws)
       ws.on('message', (message: string) => {
         const data = JSON.parse(message)
         if (data.eventName) {
@@ -41,6 +47,7 @@ class mswc {
     wss.on('listening', () => {
       this.readyCallback(this.host, this.port)
     })
+
   }
   public disconnect() {
     if (this.server) {
