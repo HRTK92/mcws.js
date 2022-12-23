@@ -14,10 +14,11 @@ yarn add @hrtk92/mcwsjs
 ```js
 import { mcws, Events } from '@hrtk92/mcwsjs'
 
-const mcserver = new mcws()
+const mcserver = new mcws('localhost', 8000)
 
 mcserver.onReady((host, port) => {
     console.log('サーバーが起動しました')
+    concole.log(`/wsserver ${host}:${port}`)
 })
 
 mcserver.onConnection(() => {
