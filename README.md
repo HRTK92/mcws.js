@@ -1,5 +1,8 @@
 # mcwsjs
 
+![npm](https://img.shields.io/npm/v/@hrtk92/mcwsjs?style=for-the-badge)
+![npm bundle size](https://img.shields.io/bundlephobia/min/@hrtk92/mcwsjs?style=for-the-badge)
+
 mcwsjsは簡単にMinecraftのWebSocketサーバーを立てることができるライブラリです。
 
 ## Install
