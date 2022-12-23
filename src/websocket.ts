@@ -11,17 +11,18 @@ class mswc {
     this.port = port
     this.server = null
   }
+
   private readyCallback: (host: string, port: number) => void = () => {}
   public onReady(callback: (host: string, port: number) => void) {
     this.readyCallback = callback
   }
 
-  private connectionCallback: (client: WebSocket) => void = () => { }
+  private connectionCallback: (client: WebSocket) => void = () => {}
   public onConnection(callback: (client: WebSocket) => void) {
     this.connectionCallback = callback
   }
 
-  private dissconnectCallback: () => void = () => { }
+  private dissconnectCallback: () => void = () => {}
   public onDisconnect(callback: () => void) {
     this.dissconnectCallback = callback
   }
@@ -33,6 +34,7 @@ class mswc {
     }
     this.eventCallbacks[eventName].push(callback)
   }
+
   public createServer() {
     const wss = new WebSocket.Server({ host: this.host, port: this.port })
     this.server = wss
@@ -54,8 +56,7 @@ class mswc {
     })
     wss.on('close', () => {
       this.dissconnectCallback()
-    }
-    )
+    })
   }
   public disconnect() {
     if (this.server) {
@@ -106,7 +107,6 @@ class mswc {
       throw new Error('Server is not running')
     }
   }
-
 }
 
 export default mswc
