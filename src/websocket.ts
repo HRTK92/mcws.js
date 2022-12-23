@@ -1,5 +1,6 @@
 import { WebSocket, WebSocketServer } from 'ws'
 import Events from './events'
+import { v4 as uuidv4 } from 'uuid'
 import { uuid } from 'uuidv4'
 
 class mswc {
@@ -76,7 +77,7 @@ class mswc {
             eventName: eventName,
           },
           header: {
-            requestId: uuid(),
+            requestId: uuidv4(),
             messagePurpose: 'subscribe',
             version: 1,
             messageType: 'commandRequest',
@@ -95,7 +96,7 @@ class mswc {
             eventName: eventName,
           },
           header: {
-            requestId: uuid(),
+            requestId: uuidv4(),
             messagePurpose: 'unsubscribe',
             version: 1,
             messageType: 'commandRequest',
