@@ -8,11 +8,13 @@ class mswc {
   private port: number
   private server: WebSocketServer | null
   private ws: WebSocket | null
-  constructor(host = 'localhost', port = 8000) {
+  private debug: boolean = false
+  constructor(host = 'localhost', port = 8000, debug = false) {
     this.host = host
     this.port = port
     this.server = null
     this.ws = null
+    this.debug = debug
   }
 
   private readyCallback: (host: string, port: number) => void = () => {}
@@ -46,6 +48,9 @@ class mswc {
       this.connectionCallback(ws)
       ws.on('message', (message: string) => {
         const data = JSON.parse(message)
+        if (this.debug) {
+          console.log(data)
+        }
         if (data.body.eventName) {
           if (this.eventCallbacks[data.body.eventName]) {
             this.eventCallbacks[data.body.eventName].forEach((callback) => {
@@ -100,6 +105,29 @@ class mswc {
             messagePurpose: 'unsubscribe',
             version: 1,
             messageType: 'commandRequest',
+          },
+        })
+      )
+    } else {
+      throw new Error('Server is not running')
+    }
+  }
+  public sendCommand(command: string) {
+    if (this.ws) {
+      this.ws.send(
+        JSON.stringify({
+          header: {
+            requestId: uuidv4(),
+            messagePurpose: 'commandRequest',
+            version: 1,
+            messageType: 'commandRequest',
+          },
+          body: {
+            origin: {
+              type: 'player',
+            },
+            commandLine: command,
+            version: 1,
           },
         })
       )
