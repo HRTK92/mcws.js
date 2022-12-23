@@ -1,6 +1,6 @@
 {
   "name": "@hrtk92/mcwsjs",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/index.js",
   "publishConfig": {
     "access": "public",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
     "ws": "^8.11.0"
   }
 }

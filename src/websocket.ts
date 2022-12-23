@@ -1,6 +1,6 @@
 import { WebSocket, WebSocketServer } from 'ws'
 import Events from './events'
-import { randomUUID } from 'crypto'
+import { uuid } from 'uuidv4'
 
 class mswc {
   private host: string
@@ -76,7 +76,7 @@ class mswc {
             eventName: eventName,
           },
           header: {
-            requestId: randomUUID(),
+            requestId: uuid(),
             messagePurpose: 'subscribe',
             version: 1,
             messageType: 'commandRequest',
@@ -95,7 +95,7 @@ class mswc {
             eventName: eventName,
           },
           header: {
-            requestId: randomUUID(),
+            requestId: uuid(),
             messagePurpose: 'unsubscribe',
             version: 1,
             messageType: 'commandRequest',
