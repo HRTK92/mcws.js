@@ -6,10 +6,12 @@ class mswc {
   private host: string
   private port: number
   private server: WebSocketServer | null
+  private ws: WebSocket | null
   constructor(host = 'localhost', port = 8000) {
     this.host = host
     this.port = port
     this.server = null
+    this.ws = null
   }
 
   private readyCallback: (host: string, port: number) => void = () => {}
@@ -39,6 +41,7 @@ class mswc {
     const wss = new WebSocket.Server({ host: this.host, port: this.port })
     this.server = wss
     wss.on('connection', (ws: WebSocket) => {
+      this.ws = ws
       this.connectionCallback(ws)
       ws.on('message', (message: string) => {
         const data = JSON.parse(message)
@@ -66,43 +69,39 @@ class mswc {
     }
   }
   public subscribe(eventName: string) {
-    if (this.server) {
-      this.server.clients.forEach((client) => {
-        client.send(
-          JSON.stringify({
-            body: {
-              eventName: eventName,
-            },
-            header: {
-              requestId: randomUUID(),
-              messagePurpose: 'subscribe',
-              version: 1,
-              messageType: 'commandRequest',
-            },
-          })
-        )
-      })
+    if (this.ws) {
+      this.ws.send(
+        JSON.stringify({
+          body: {
+            eventName: eventName,
+          },
+          header: {
+            requestId: randomUUID(),
+            messagePurpose: 'subscribe',
+            version: 1,
+            messageType: 'commandRequest',
+          },
+        })
+      )
     } else {
       throw new Error('Server is not running')
     }
   }
   public unsubscribe(eventName: string) {
-    if (this.server) {
-      this.server.clients.forEach((client) => {
-        client.send(
-          JSON.stringify({
-            body: {
-              eventName: eventName,
-            },
-            header: {
-              requestId: randomUUID(),
-              messagePurpose: 'unsubscribe',
-              version: 1,
-              messageType: 'commandRequest',
-            },
-          })
-        )
-      })
+    if (this.ws) {
+      this.ws.send(
+        JSON.stringify({
+          body: {
+            eventName: eventName,
+          },
+          header: {
+            requestId: randomUUID(),
+            messagePurpose: 'unsubscribe',
+            version: 1,
+            messageType: 'commandRequest',
+          },
+        })
+      )
     } else {
       throw new Error('Server is not running')
     }
