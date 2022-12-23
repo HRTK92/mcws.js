@@ -42,9 +42,9 @@ class mswc {
       this.connectionCallback(ws)
       ws.on('message', (message: string) => {
         const data = JSON.parse(message)
-        if (data.eventName) {
-          if (this.eventCallbacks[data.eventName]) {
-            this.eventCallbacks[data.eventName].forEach((callback) => {
+        if (data.body.eventName) {
+          if (this.eventCallbacks[data.body.eventName]) {
+            this.eventCallbacks[data.body.eventName].forEach((callback) => {
               callback(data)
             })
           }
