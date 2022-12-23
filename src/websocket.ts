@@ -21,6 +21,11 @@ class mswc {
     this.connectionCallback = callback
   }
 
+  private dissconnectCallback: () => void = () => { }
+  public onDisconnect(callback: () => void) {
+    this.dissconnectCallback = callback
+  }
+
   private eventCallbacks: { [eventName: string]: Array<(data: any) => void> } = {}
   public on(eventName: string, callback: (data: any) => void) {
     if (!this.eventCallbacks[eventName]) {
@@ -47,7 +52,10 @@ class mswc {
     wss.on('listening', () => {
       this.readyCallback(this.host, this.port)
     })
-
+    wss.on('close', () => {
+      this.dissconnectCallback()
+    }
+    )
   }
   public disconnect() {
     if (this.server) {
