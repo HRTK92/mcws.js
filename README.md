@@ -16,23 +16,23 @@ import { mcws, Events } from '@hrtk92/mcwsjs'
 
 const mcserver = new mcws()
 
-mcserver.onReady = () => {
+mcserver.onReady(() => {
     console.log('サーバーが起動しました')
-}
+})
 
-mcserver.onConnect = () => {
+mcserver.onConnection(() => {
     console.log('MineCraftと接続しました')
     mcserver.subscribe(Events.PlayerMessage) // 受け取るイベントを登録
-}
+})
 
 mcserver.on(Events.PlayerMessage, (data) => {
     console.log(`${data.body.message} by ${data.body.sender}`)
     mcserver.sendCommand('say hello') // コマンドを送信
 })
 
-mcserver.onDisconnect = () => {
+mcserver.onDisconnect(() => {
     console.log('接続が切断されました')
-}
+})
 
 mcserver.createServer() // サーバーを起動
 ```

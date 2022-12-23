@@ -38,6 +38,7 @@ class mswc {
       this.eventCallbacks[eventName] = []
     }
     this.eventCallbacks[eventName].push(callback)
+    this.debug && console.log(`Added callback for ${eventName}`)
   }
 
   public createServer() {
@@ -48,11 +49,10 @@ class mswc {
       this.connectionCallback(ws)
       ws.on('message', (message: string) => {
         const data = JSON.parse(message)
-        if (this.debug) {
-          console.log(data)
-        }
+        this.debug && console.log(data)
         if (data.header.eventName) {
           if (this.eventCallbacks[data.header.eventName]) {
+            this.debug && console.log(`Event ${data.header.eventName} triggered`)
             this.eventCallbacks[data.header.eventName].forEach((callback) => {
               callback(data)
             })
@@ -89,6 +89,7 @@ class mswc {
           },
         })
       )
+      this.debug && console.log(`Subscribed to ${eventName}`)
     } else {
       throw new Error('Server is not running')
     }
@@ -131,6 +132,7 @@ class mswc {
           },
         })
       )
+      this.debug && console.log(`Sent command ${command}`)
     } else {
       throw new Error('Server is not running')
     }
