@@ -21,13 +21,13 @@ mcserver.onReady(() => {
 })
 
 mcserver.onConnection(() => {
-    console.log('MineCraftと接続しました')
+    console.log('Minecraftと接続しました')
+    mcserver.sendCommand('say 接続しました') // コマンドを送信
     mcserver.subscribe(Events.PlayerMessage) // 受け取るイベントを登録
 })
 
 mcserver.on(Events.PlayerMessage, (data) => {
     console.log(`${data.body.message} by ${data.body.sender}`)
-    mcserver.sendCommand('say hello') // コマンドを送信
 })
 
 mcserver.onDisconnect(() => {
