@@ -27,6 +27,7 @@ mcserver.onConnect = () => {
 
 mcserver.on(Events.PlayerMessage, (data) => {
     console.log(`${data.body.message} by ${data.body.sender}`)
+    mcserver.sendCommand('say hello') // コマンドを送信
 })
 
 mcserver.onDisconnect = () => {
@@ -53,3 +54,12 @@ MineCraftと接続したときに呼ばれる
 ### on(event, callback)
 
 [event](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)で指定したイベントが発生したときに呼ばれる
+
+## コマンド
+
+```ts
+mcserver.sendCommand('say hello')
+```
+
+コマンドを送信することができます。
+注意: 先頭の`/`をつけないでください。
