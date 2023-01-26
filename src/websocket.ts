@@ -1,7 +1,5 @@
 import { WebSocket, WebSocketServer } from 'ws'
-import Events from './events'
 import { v4 as uuidv4 } from 'uuid'
-import { uuid } from 'uuidv4'
 
 class mswc {
   private host: string
