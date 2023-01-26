@@ -1,6 +1,18 @@
 import { WebSocket, WebSocketServer } from 'ws'
 import { v4 as uuidv4 } from 'uuid'
 
+type Data = {
+  header: {
+    messagePurpose: string
+    requestId: string
+    version: number
+  },
+  body: {
+    eventName: string
+    properties: any
+  }
+}
+
 class mswc {
   private host: string
   private port: number
@@ -30,8 +42,8 @@ class mswc {
     this.dissconnectCallback = callback
   }
 
-  private eventCallbacks: { [eventName: string]: Array<(data: any) => void> } = {}
-  public on(eventName: string, callback: (data: any) => void) {
+  private eventCallbacks: { [eventName: string]: Array<(data: Data) => void> } = {}
+  public on(eventName: string, callback: (data: Data) => void) {
     if (!this.eventCallbacks[eventName]) {
       this.eventCallbacks[eventName] = []
     }
@@ -46,12 +58,12 @@ class mswc {
       this.ws = ws
       this.connectionCallback(ws)
       ws.on('message', (message: string) => {
-        const data = JSON.parse(message)
+        const data: Data = JSON.parse(message)
         this.debug && console.log(data)
-        if (data.header.eventName) {
-          if (this.eventCallbacks[data.header.eventName]) {
-            this.debug && console.log(`Event ${data.header.eventName} triggered`)
-            this.eventCallbacks[data.header.eventName].forEach((callback) => {
+        if (data.body.eventName) {
+          if (this.eventCallbacks[data.body.eventName]) {
+            this.debug && console.log(`Event ${data.body.eventName} triggered`)
+            this.eventCallbacks[data.body.eventName].forEach((callback) => {
               callback(data)
             })
           }
