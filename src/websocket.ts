@@ -1,15 +1,15 @@
-import { WebSocket, WebSocketServer } from 'ws'
 import { v4 as uuidv4 } from 'uuid'
+import { WebSocket, WebSocketServer } from 'ws'
 
 type Data = {
   header: {
     messagePurpose: string
     requestId: string
     version: number
-  },
+  }
   body: {
     eventName: string
-    properties: any
+    [key: string]: any
   }
 }
 
