@@ -3,13 +3,23 @@
 ![npm](https://img.shields.io/npm/v/@hrtk92/mcwsjs?style=for-the-badge)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@hrtk92/mcwsjs?style=for-the-badge)
 
-mcws.js is a library that makes it easy to start a Minecraft WebSocket server.
+mcws.js is a library that makes it **easy** to start a Minecraft WebSocket server.
 
 ## Install
 
 ```sh
-yarn add @hrtk92/mcwsjs
+$ yarn add @hrtk92/mcwsjs
 ```
+
+## Usage
+
+Here is a detailed explanation of how to use this library:
+
+- Step 1: Import the library in your project
+- Step 2: Create an instance of the `mcws` class, passing in the host and port as arguments
+- Step 3: Call the `createServer()` method to start the server
+- Step 4: Register event listeners using the `on()` method to receive events from the Minecraft server
+- Step 5: Use the `sendCommand()` method to send commands to the Minecraft server
 
 ## Example
 
@@ -58,6 +68,9 @@ Called when the connection is disconnected
 ### on(event, callback)
 
 Called when the [event](https://github.com/HRTK92/mcwsjs/blob/main/src/events.ts) specified by event occurs
+
+> **Note**
+> I used [this gist](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names) as a reference to create an event list.
 
 ## Command
 
