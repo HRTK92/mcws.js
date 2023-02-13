@@ -1,16 +1,15 @@
-# mcwsjs
+# mcws.js
 
 ![npm](https://img.shields.io/npm/v/@hrtk92/mcwsjs?style=for-the-badge)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@hrtk92/mcwsjs?style=for-the-badge)
 
-mcwsjsは簡単にMinecraftのWebSocketサーバーを立てることができるライブラリです。
+mcws.js is a library that makes it easy to start a Minecraft WebSocket server.
 
 ## Install
 
 ```sh
 yarn add @hrtk92/mcwsjs
 ```
-
 
 ## Example
 
@@ -20,14 +19,14 @@ import { mcws, Events } from '@hrtk92/mcwsjs'
 const mcserver = new mcws('localhost', 8000)
 
 mcserver.onReady((host, port) => {
-    console.log('サーバーが起動しました')
+    console.log('Server started')
     console.log(`/wsserver ${host}:${port}`)
 })
 
 mcserver.onConnection(() => {
-    console.log('Minecraftと接続しました')
-    mcserver.sendCommand('say 接続しました') // コマンドを送信
-    mcserver.subscribe(Events.PlayerMessage) // 受け取るイベントを登録
+    console.log('Connected to Minecraft')
+    mcserver.sendCommand('say Connected') // send command
+    mcserver.subscribe(Events.PlayerMessage) // register events to receive
 })
 
 mcserver.on(Events.PlayerMessage, (data) => {
@@ -35,36 +34,38 @@ mcserver.on(Events.PlayerMessage, (data) => {
 })
 
 mcserver.onDisconnect(() => {
-    console.log('接続が切断されました')
+    console.log('Disconnected')
 })
 
-mcserver.createServer() // サーバーを起動
+mcserver.createServer() // start the server
+
 ```
 
-## イベント
+## Events
 
 ### onReady
 
-サーバーが起動したときに呼ばれる
+Called when the server is started
 
 ### onConnect
 
-MineCraftと接続したときに呼ばれる
+Called when connected to Minecraft
 
 ### onDisconnect
 
-接続が切断されたときに呼ばれる
+Called when the connection is disconnected
 
 ### on(event, callback)
 
-[event](https://github.com/HRTK92/mcwsjs/blob/main/src/events.ts)で指定したイベントが発生したときに呼ばれる
+Called when the [event](https://github.com/HRTK92/mcwsjs/blob/main/src/events.ts) specified by event occurs
 
-## コマンド
+## Command
 
 ```ts
 mcserver.sendCommand('say hello')
 ```
 
-コマンドを送信することができます。
+You can send commands.
 
-注意: 先頭の`/`をつけないでください。
+> **Warning**
+> There is no need to add a `/` at the beginning.
