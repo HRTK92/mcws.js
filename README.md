@@ -69,7 +69,7 @@ Called when the connection is disconnected
 
 Called when the [event](https://github.com/HRTK92/mcwsjs/blob/main/src/events.ts) specified by event occurs
 
-> **Note**
+> **Note**  
 > I used [this gist](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names) as a reference to create an event list.
 
 ## Command
@@ -80,5 +80,5 @@ mcserver.sendCommand('say hello')
 
 You can send commands.
 
-> **Warning**
+> **Warning**  
 > There is no need to add a `/` at the beginning.
