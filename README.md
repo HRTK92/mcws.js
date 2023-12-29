@@ -1,7 +1,8 @@
 # mcws.js
 
-![npm](https://img.shields.io/npm/v/@hrtk92/mcwsjs?style=for-the-badge)
-![npm bundle size](https://img.shields.io/bundlephobia/min/@hrtk92/mcwsjs?style=for-the-badge)
+![npm](https://img.shields.io/npm/v/@hrtk92/mcwsjs)
+![npm](https://img.shields.io/npm/dt/%40hrtk92%2Fmcwsjs)
+[![GitHub Release](https://github.com/HRTK92/mcws.js/actions/workflows/release.yml/badge.svg)](https://github.com/HRTK92/mcws.js/actions/workflows/release.yml)
 
 mcws.js is a library that makes it **easy** to start a Minecraft WebSocket server.
 
