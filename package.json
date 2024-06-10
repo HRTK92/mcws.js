@@ -28,7 +28,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "uuid": "^9.0.1",
+    "uuid": "^10.0.0",
     "uuidv4": "^6.2.13",
     "ws": "^8.17.0"
   }
