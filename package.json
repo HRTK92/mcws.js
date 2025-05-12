@@ -23,13 +23,13 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.14.10",
-    "@types/ws": "^8.5.12",
+    "@types/ws": "^8.18.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "uuid": "^10.0.0",
     "uuidv4": "^6.2.13",
-    "ws": "^8.18.0"
+    "ws": "^8.18.2"
   }
 }
